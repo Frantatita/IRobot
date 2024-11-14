@@ -9,7 +9,6 @@
 - **Desarrollada en Kotlin**: Aprovecha las ventajas y la eficiencia de Kotlin para el desarrollo de aplicaciones Android.
 - **Integración con Arduino**: Utiliza una placa Arduino para capturar y transmitir datos de sensores.
 - **Interfaz intuitiva**: Proporciona una interfaz móvil fácil de usar para el seguimiento y control de objetos.
-- **Escalabilidad**: Preparada para integrar OpenCV en versiones futuras, lo que permitirá agregar capacidades de visión por computadora.
 
 ## Tecnologías utilizadas
 
