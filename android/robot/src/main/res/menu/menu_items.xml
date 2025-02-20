@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--
+    <item
+        android:id="@+id/playGroundFragment"
+        android:icon="@drawable/ic_playground"
+        android:title="@string/playground"
+        app:showAsAction="ifRoom"/> -->
+    <item
+        android:id="@+id/usbFragment"
+        android:icon="@drawable/ic_usb_movimiento"
+        android:title="@string/usb"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/bluetoothFragment"
+        android:icon="@drawable/ic_bluetooth"
+        android:title="@string/bluetooth"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings_movimiento"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom"/>
+        <!--android:icon="@drawable/ic_settings"-->
+
+
+    <item
+        android:id="@+id/barCodeScannerFragment"
+        android:icon="@drawable/ic_qr_code_scanner"
+        android:title="@string/scanner"
+        app:showAsAction="ifRoom"/>
+</menu>
