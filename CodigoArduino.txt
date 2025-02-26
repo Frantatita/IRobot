@@ -1,0 +1,111 @@
+void setup() {
+  Serial.begin(115200);
+  Serial1.begin(115200);
+  Serial1.println("Serial USB conectado");
+}
+
+void loop() {
+  if (Serial.available()) {
+    String cadenaRecibida = Serial.readStringUntil('\n');
+
+    //Llamo a las funciones
+    //procesarCentroideConLetra(cadenaRecibida);
+    //procesarCentroideDecimal(cadenaRecibida);
+    procesarCentroideSimple(cadenaRecibida);
+
+  }
+}
+
+/*Función para conocer las velocidades, dado que la aplicación manda
+  un mensaje con: c120,120*/
+void procesarCentroideConLetra(String mensaje) {
+  if (mensaje.startsWith("c")) {
+    mensaje.remove(0, 1);  // Eliminar el carácter 'c'
+    int indiceComa = mensaje.indexOf(',');
+    if (indiceComa != -1) {
+      int izquierda = mensaje.substring(0, indiceComa).toInt();
+      int derecha = mensaje.substring(indiceComa + 1).toInt();
+      // Procesa los valores de izquierda y derecha
+      Serial1.print("Izquierda: ");
+      Serial1.print(izquierda);
+      Serial1.print(", Derecha: ");
+      Serial1.println(derecha);
+    }
+  }
+}
+
+/*Función para conocer las coordenadas, dado que la aplicación manda
+  un mensaje con: 123.04,243.42*/
+void procesarCentroideDecimal(String mensaje) {
+    // Eliminar espacios y comillas
+    mensaje.trim();
+
+    // Buscar la posición de "X:" y "Y:"
+    int indiceX = mensaje.indexOf("X:");
+    int indiceY = mensaje.indexOf("Y:");
+
+    if (indiceX != -1 && indiceY != -1) {  // Verifica que ambas coordenadas existen
+        // Extraer el valor de X
+        int inicioX = indiceX + 2; // El índice donde comienza el valor de X
+        int finX = mensaje.indexOf(',', inicioX); // Encuentra la coma después de X
+
+        // Si no se encuentra la coma, ajustamos finX al final del mensaje
+        if (finX == -1) {
+            finX = mensaje.length(); // Asignamos finX al final de la cadena
+        }
+
+        String valorX = mensaje.substring(inicioX, finX); // Extrae el valor de X
+        valorX.trim(); // Limpia el valor de X
+
+        // Extraer el valor de Y
+        int inicioY = indiceY + 2; // El índice donde comienza el valor de Y
+        String valorY;
+
+        // Verificar si hay una coma después de X
+        if (finX < mensaje.length()) {
+            valorY = mensaje.substring(finX + 1); // Extrae el valor después de la coma
+            valorY.trim(); // Limpia el valor de Y
+        } else {
+            valorY = mensaje.substring(inicioY); // Si no hay coma, extrae el valor hasta el final
+            valorY.trim(); // Limpia el valor de Y
+        }
+
+        // Convertir a enteros
+        int x = valorX.toInt(); // Convertir a entero
+        int y = valorY.toInt(); // Convertir a entero
+
+        // Procesar los valores de X e Y
+        Serial1.print("X: ");
+        Serial1.print(x);
+        Serial1.print(", Y: ");
+        Serial1.println(y);
+    } else {
+        Serial1.println("Formato incorrecto.");  // Mensaje si el formato no es válido
+    }
+}
+
+/* Función para procesar coordenadas con el formato "100,240" */
+void procesarCentroideSimple(String mensaje) {
+    mensaje.trim();  // Eliminar espacios
+
+    int indiceComa = mensaje.indexOf(',');
+    if (indiceComa != -1) {
+        String valorX = mensaje.substring(0, indiceComa);
+        String valorY = mensaje.substring(indiceComa + 1);
+
+        valorX.trim();
+        valorY.trim();
+
+        if (valorX.length() > 0 && valorY.length() > 0) {
+            int x = valorX.toInt();
+            int y = valorY.toInt();
+
+            Serial1.print("Formato Simple -> X: ");
+            Serial1.print(x);
+            Serial1.print(", Y: ");
+            Serial1.println(y);
+        }
+    } else {
+          Serial1.println("Formato incorrecto");
+    }
+}
