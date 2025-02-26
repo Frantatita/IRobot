@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/reyes/Desktop/ServicioSocial/AplicacionGit/Android/android/openCV/libcxx_helper
+# Install script for directory: C:/Users/reyes/Desktop/ServicioSocial/RepositorioGit/IRobot/android/openCV/libcxx_helper
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/reyes/Desktop/ServicioSocial/AplicacionGit/Android/android/openCV/.cxx/Debug/1d183b4l/armeabi-v7a/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/reyes/Desktop/ServicioSocial/RepositorioGit/IRobot/android/openCV/.cxx/Debug/1d183b4l/armeabi-v7a/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

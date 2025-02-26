@@ -10,7 +10,6 @@ buildscript {
         mavenLocal()
         jcenter()   //Linea agregada
         maven { url "https://jitpack.io" }      //Linea
-        maven { url 'https://jitpack.io' } // Agrega esta línea
         maven {url("$rootDir/..")}      //Linea agregada
         gradlePluginPortal()
     }
@@ -33,7 +32,7 @@ allprojects {
         jcenter()
         mavenCentral()
         mavenLocal()
-        maven { url "https://jitpack.io" }
+        maven { url "https://www.jitpack.io" }
         maven {url("$rootDir/..")}   //Linea agregada
         gradlePluginPortal()
     }
