@@ -109,4 +109,3 @@ void processMessageSimpleCoordinates(String msg) {
           Serial1.println("Formato incorrecto");
     }
 }
-	
