@@ -23,9 +23,12 @@ import java.util.Map;
 import org.openbot.env.Logger;
 import org.openbot.utils.Constants;
 import timber.log.Timber;
+import java.nio.charset.StandardCharsets;
+
 
 public class UsbConnection {
-  private static final int USB_VENDOR_ID = 6790; // 0x2341; // 9025
+  private static final int USB_VENDOR_ID = 6790; // 0x234109YRZ[_KNDSA  aqw67u
+  // ]5
   private static final int USB_PRODUCT_ID = 29987; // 0x0001;
   private static final Logger LOGGER = new Logger();
 
@@ -157,9 +160,12 @@ public class UsbConnection {
   //Inicia la conexion con un dispositico USB
   private boolean startSerialConnection(UsbDevice device) {
     LOGGER.i("Ready to open USB device connection");
+    //Timber.d("Listo para abrir la conexion con el dispositivo USB");
+    Timber.i("Listo para abrir la conexion con el dispositivo USB ");
     //Realiza la conexion con el USB
     connection = usbManager.openDevice(device);
-    System.out.println(connection.toString());
+    //System.out.println(connection.toString());
+    Timber.i(connection.toString());
       //Descubre todas las caracteristicas de la USB
     serialDevice = UsbSerialDevice.createUsbSerialDevice(device, connection);
     boolean success = false;
@@ -190,7 +196,8 @@ public class UsbConnection {
   //Maneja los datos recibidos, muestra los logs de datos recibidos  y envia un broadcast
   private void onSerialDataReceived(String data) {
     // Add whatever you want here
-    LOGGER.i("Serial data received from USB: " + data);
+    //LOGGER.i("Serial data received from USB: " + data);
+    Timber.d("Datos seriales recibidos desde el USB: " + data);
     //Envia y recibe mensajes dentro de la misma aplicacoin
     localBroadcastManager.sendBroadcast(new Intent(Constants.DEVICE_ACTION_DATA_RECEIVED)
             //Indica que la fuente de informacion es un dispositivo USB
@@ -231,9 +238,11 @@ public class UsbConnection {
       //Convierte el mensaje String en un arreglo de bytes
       //El metodoo write manda a través del cable usb
       serialDevice.write(msg.getBytes(UTF_8));  //
-      System.out.println(serialDevice.toString());
+      //System.out.println(serialDevice.toString());
+      //Timber.d(serialDevice.toString());
       busy = false;
     } else {
+      //System.out.println("MENSAJE ENVIADO AL ROBOT: " + msg);
       Timber.d("USB ocupada, no se pudo enviar: %s", msg);
     }
   }

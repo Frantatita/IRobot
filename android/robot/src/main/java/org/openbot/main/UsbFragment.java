@@ -35,6 +35,7 @@ public class UsbFragment extends PreferenceFragmentCompat {
       connection.setOnPreferenceClickListener(
           preference -> {
             Timber.d(String.valueOf(connection.isChecked()));
+            Timber.i(String.valueOf(connection.isChecked()));
             if (vehicle != null) {
               if (connection.isChecked()) {
                 vehicle.connectUsb();

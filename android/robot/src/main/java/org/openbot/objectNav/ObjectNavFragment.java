@@ -284,6 +284,9 @@ public class ObjectNavFragment extends CameraFragment {
   private void updateCropImageInfo() {
         Timber.i("%s x %s",getPreviewSize().getWidth(), getPreviewSize().getHeight());
         Timber.i("%s x %s",getMaxAnalyseImageSize().getWidth(), getMaxAnalyseImageSize().getHeight());
+        Timber.i("Vista de tamaño: %s x %s", getPreviewSize().getWidth(), getPreviewSize().getHeight());
+        Timber.i("Vista de tamaño: %s x %s", getMaxAnalyseImageSize().getWidth(), getMaxAnalyseImageSize().getHeight());
+
     frameToCropTransform = null;
 
     //Calcula la orientación del sensor de la cámara en relación con la pantalla del dispositivo.
@@ -514,6 +517,7 @@ public class ObjectNavFragment extends CameraFragment {
               canvas.drawBitmap(bitmap, frameToCropTransform, null);
             }
 
+            //Detección de objetos
             if (detector != null) {
               //Timber.i("Ejecutando detección en la imagen %s", frameNum);
               final long startTime = SystemClock.elapsedRealtime();
@@ -555,14 +559,11 @@ public class ObjectNavFragment extends CameraFragment {
                   mappedRecognitions.add(result);
                 }
               }
-
               //AQUI AL DETECTAR LA IMAGEN MANDA COMANDOS PARA AVANZAR AL ROBOT
               tracker.trackResults(mappedRecognitions, frameNum);
               //System.out.println("Resultados rastreados: " + mappedRecognitions.toString() + " en el frame " + frameNum);
               Control target = tracker.updateTarget();
               //System.out.println("Objetivo actualizado: " + target.toString());
-
-
               if (mirrorControl) {
                 //System.out.println("Espejo de control activado. Mandando comando espejo.");
                 handleDriveCommand(target.mirror());
@@ -570,8 +571,6 @@ public class ObjectNavFragment extends CameraFragment {
                 //System.out.println("Mandando comando directo.");
                 handleDriveCommand(target);
               }
-
-
               binding.trackingOverlay.postInvalidate();
             }
 

@@ -3,6 +3,7 @@ package org.openbot.vehicle;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PointF;
+import android.icu.text.SymbolTable;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import org.openbot.env.SensorReading;
 import org.openbot.main.CommonRecyclerViewAdapter;
 import org.openbot.main.ScanDeviceAdapter;
 import org.openbot.utils.Enums;
+
+import timber.log.Timber;
 
 public class Vehicle {
 
@@ -177,7 +180,7 @@ public class Vehicle {
 
   //Envía el comando "f\n" para solicitar la configuración del vehículo.
   public void requestVehicleConfig() {
-    sendStringToDevice(String.format(Locale.US, "f\n"));
+    //sendStringToDevice(String.format(Locale.US, "f\n"));
   }
 
   //Procesa una cadena de texto que contiene informacion del vehiculo, en este caso el BODY (cuerpo)
@@ -364,13 +367,13 @@ public class Vehicle {
     this.indicator = indicator;
     switch (indicator) {
       case -1:
-        sendStringToDevice(String.format(Locale.US, "i1,0\n"));
+        //sendStringToDevice(String.format(Locale.US, "i1,0\n"));
         break;
       case 0:
-        sendStringToDevice(String.format(Locale.US, "i0,0\n"));
+        //sendStringToDevice(String.format(Locale.US, "i0,0\n"));
         break;
       case 1:
-        sendStringToDevice(String.format(Locale.US, "i0,1\n"));
+        //sendStringToDevice(String.format(Locale.US, "i0,1\n"));
         break;
     }
   }
@@ -415,9 +418,11 @@ public class Vehicle {
 
   //Envia el mensaje, ya sea si esta conectado por USB o por Bluetooth
   private void sendStringToDevice(String message) {
-    System.out.println("MENSAJE ENVIADO AL ROBOT: " + message);
+    //System.out.println("MENSAJE ENVIADO AL ROBOT: " + message);
     if (getConnectionType().equals("USB") && usbConnection != null) {
-      usbConnection.send(message);
+      usbConnection.send(message); //METODO QUE ENVIA EL MENSAJE AL ROBOT
+      //System.out.println("Este mensaje se envia: " + message);
+      Timber.i("MENSAJE ENVIADO POR CONEXION SERIAL ES: " + message);
     } else if (getConnectionType().equals("Bluetooth")
         && bluetoothManager != null
         && bluetoothManager.isBleConnected()) {
@@ -436,14 +441,28 @@ public class Vehicle {
   public void sendLightIntensity(float frontPercent, float backPercent) {
     int front = (int) (frontPercent * 255.f);
     int back = (int) (backPercent * 255.f);
-    sendStringToDevice(String.format(Locale.US, "l%d,%d\n", front, back));
-    System.out.println(String.format(Locale.US, "l%d,%d\n", front, back));
+    //sendStringToDevice(String.format(Locale.US, "l%d,%d\n", front, back));
+    //System.out.println(String.format(Locale.US, "l%d,%d\n", front, back));
   }
 
+  //Funcion qye manda al robot las coordenadas localizadas que son el centroide del objeto rastreado
   public void sendCordinateRobot(float coordX, float coordY){
     String cordenadas = coordX  + "," + coordY;
     sendStringToDevice(cordenadas);
   }
+
+  public void sendConteoPrueba() {
+    for (int i = 1; i <= 180; i++) { // Ciclo de 1 a 180
+      String conteo = String.valueOf(i); // Convertir el número a String
+      //sendStringToDevice(conteo); // Enviar el conteo al dispositivo
+      try {
+        Thread.sleep(1000); // Esperar 1 segundo (1000 milisegundos)
+      } catch (InterruptedException e) {
+        e.printStackTrace(); // Manejo de excepción si se interrumpe el ciclo
+      }
+    }
+  }
+
 
   // Método para recibir la posición central del objeto rastreado y enviar las coordenadas al robot
   public void receiveCenterOfTrackedObject(PointF centerPoint) {
@@ -453,8 +472,6 @@ public class Vehicle {
       sendCordinateRobot(coordX, coordY);
     }
   }
-
-
 
   //Obtiene las velocidades de las ruedas, las ajusta y envia un comando de control
   public void sendControl() {
@@ -481,36 +498,35 @@ public class Vehicle {
     if (noiseEnabled && noise.getDirection() > 0) {
       right = (int) ((control.getRight() - noise.getValue()) * speedMultiplier);
     }
-    sendStringToDevice(String.format(Locale.US, "c%d,%d\n", left, right));
+    //sendStringToDevice(String.format(Locale.US, "c%d,%d\n", left, right));
   }
 
   //MODIFICAR ESTA LINEA PARA QUE MANDE ALGUNA OPCION.
-
   protected void sendMessageFrank(String message) {
-      sendStringToDevice("f");
+      //sendStringToDevice("f");
   }
 
   protected void sendHeartbeat(int timeout_ms) {
-    sendStringToDevice(String.format(Locale.getDefault(), "h%d\n", timeout_ms));
+    //sendStringToDevice(String.format(Locale.getDefault(), "h%d\n", timeout_ms));
     //sendStringToDevice(String.format("p"));
   }
   protected void setSonarFrequency(int interval_ms) {
-    sendStringToDevice(String.format(Locale.getDefault(), "s%d\n", interval_ms));
+    //sendStringToDevice(String.format(Locale.getDefault(), "s%d\n", interval_ms));
   }
 
   protected void setVoltageFrequency(int interval_ms) {
-    sendStringToDevice(String.format(Locale.getDefault(), "v%d\n", interval_ms));
+    //sendStringToDevice(String.format(Locale.getDefault(), "v%d\n", interval_ms));
   }
 
   protected void setWheelOdometryFrequency(int interval_ms) {
-    sendStringToDevice(String.format(Locale.getDefault(), "w%d\n", interval_ms));
+    //sendStringToDevice(String.format(Locale.getDefault(), "w%d\n", interval_ms));
   }
 
   private class HeartBeatTask extends TimerTask {
 
     @Override
     public void run() {
-       // sendHeartbeat(750);
+       //sendHeartbeat(750);
        // sendMessageFrank("f");
     }
   }
