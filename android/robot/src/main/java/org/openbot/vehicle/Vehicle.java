@@ -2,6 +2,7 @@ package org.openbot.vehicle;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.icu.text.SymbolTable;
 import android.os.Looper;
@@ -9,6 +10,9 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import com.ficat.easyble.BleDevice;
+
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -416,19 +420,46 @@ public class Vehicle {
     return usbConnected;
   }
 
+  /*
   //Envia el mensaje, ya sea si esta conectado por USB o por Bluetooth
   private void sendStringToDevice(String message) {
     //System.out.println("MENSAJE ENVIADO AL ROBOT: " + message);
     if (getConnectionType().equals("USB") && usbConnection != null) {
       usbConnection.send(message); //METODO QUE ENVIA EL MENSAJE AL ROBOT
       //System.out.println("Este mensaje se envia: " + message);
-      Timber.i("MENSAJE ENVIADO POR CONEXION SERIAL ES: " + message);
+      //Timber.i("MENSAJE ENVIADO POR CONEXION SERIAL ES: " + message);
     } else if (getConnectionType().equals("Bluetooth")
         && bluetoothManager != null
         && bluetoothManager.isBleConnected()) {
       sendStringToBle(message);
     }
+  }*/
+
+
+  //Manda valores en entero
+  private void sendStringToDevice(int message) {
+    //System.out.println("MENSAJE ENVIADO AL ROBOT: " + message);
+    if (getConnectionType().equals("USB") && usbConnection != null) {
+      usbConnection.send(message); //METODO QUE ENVIA EL MENSAJE AL ROBOT
+      //System.out.println("Este mensaje se envia: " + message);
+      //Timber.i("MENSAJE ENVIADO POR CONEXION SERIAL ES: " + message);
+    } else if (getConnectionType().equals("Bluetooth")
+            && bluetoothManager != null
+            && bluetoothManager.isBleConnected()) {
+    }
   }
+
+/*
+  private void sendBytesToDevice(byte[] message) {
+    if (getConnectionType().equals("USB") && usbConnection != null) {
+      usbConnection.send(message); // Método que acepte byte[]
+    } else if(getConnectionType().equals("Bluetooth")
+            && bluetoothManager != null
+            && bluetoothManager.isBleConnected()) {
+    }
+  }
+*/
+
 
   public float getLeftSpeed() {
     return control.getLeft() * speedMultiplier;
@@ -444,12 +475,32 @@ public class Vehicle {
     //sendStringToDevice(String.format(Locale.US, "l%d,%d\n", front, back));
     //System.out.println(String.format(Locale.US, "l%d,%d\n", front, back));
   }
-
+/*
   //Funcion qye manda al robot las coordenadas localizadas que son el centroide del objeto rastreado
-  public void sendCordinateRobot(float coordX, float coordY){
+  public void sendCordinateRobot(int coordX, int coordY){
     String cordenadas = coordX  + "," + coordY;
     sendStringToDevice(cordenadas);
   }
+ */
+
+
+  public void sendCordinateRobot(int coordX){
+    int cordenadas = coordX;
+    //int [] coordenadas = {coordX, coordY};
+    sendStringToDevice(cordenadas);
+  }
+
+/*
+  //Metodo para mandar por un arreglo
+  public void sendCoordinatesToRobot(int coordX, int coordY) {
+    ByteBuffer buffer = ByteBuffer.allocate(8); // 4 bytes por coordenada
+    buffer.putInt(coordX);
+    buffer.putInt(coordY);
+    byte[] byteArray = buffer.array();
+    sendBytesToDevice(byteArray);
+  }
+*/
+
 
   public void sendConteoPrueba() {
     for (int i = 1; i <= 180; i++) { // Ciclo de 1 a 180
@@ -463,15 +514,28 @@ public class Vehicle {
     }
   }
 
-
+/*
   // Método para recibir la posición central del objeto rastreado y enviar las coordenadas al robot
-  public void receiveCenterOfTrackedObject(PointF centerPoint) {
+  public void receiveCenterOfTrackedObject(Point centerPoint) {
     if (centerPoint != null) {
-      float coordX = centerPoint.x;
-      float coordY = centerPoint.y;
+      int coordX = centerPoint.x;
+      int coordY = centerPoint.y;
       sendCordinateRobot(coordX, coordY);
     }
   }
+  */
+
+  public void receiveCenterOfTrackedObject(Point centerPoint) {
+    if (centerPoint != null) {
+      int coordX = centerPoint.x;
+      //int coordY = centerPoint.y;
+      sendCordinateRobot(coordX);
+      //sendCoordinatesToRobot(coordX, coordY);
+    }
+  }
+
+
+
 
   //Obtiene las velocidades de las ruedas, las ajusta y envia un comando de control
   public void sendControl() {

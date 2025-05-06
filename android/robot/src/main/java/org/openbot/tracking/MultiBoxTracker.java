@@ -25,9 +25,11 @@ import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 
@@ -48,7 +50,8 @@ import timber.log.Timber;
 /** Un rastreador que maneja la supresión no máxima y hace coincidir los objetos existentes con nuevas detecciones. */
   public class MultiBoxTracker {
     private static final float TEXT_SIZE_DIP = 18;
-    private static final float MIN_SIZE = 16.0f;
+    //private static final float MIN_SIZE = 16.0f;
+    private static final float MIN_SIZE = 4.0f; // en lugar de 16.0f
     private static final int[] COLORS = {
       Color.BLACK,
       Color.RED,
@@ -85,7 +88,14 @@ import timber.log.Timber;
     private float leftControl;
     private float rightControl;
     private boolean useDynamicSpeed = false;
-  
+
+    private float movingCircleX = 0;
+    private final float circleY = 350;  // Línea horizontal fija
+    private final float circleStep = 1;
+    private long lastMoveTime = System.currentTimeMillis();
+
+    // Para control de coordenadas enteras
+    private Point currentCirclePoint = new Point(0, (int) circleY);
   
   
     public MultiBoxTracker(final Context context) {
@@ -145,7 +155,7 @@ import timber.log.Timber;
       Timber.i("Procesando %d resultados de %d", results.size(), timestamp);
       processResults(results);
     }
-  
+
     private Matrix getFrameToCanvasMatrix() {
       return frameToCanvasMatrix;
     }
@@ -227,6 +237,7 @@ import timber.log.Timber;
     }
   
     // Dibuja los cuadros de seguimiento en el lienzo
+
     public synchronized void draw(final Canvas canvas) {
       updateFrameToCanvasMatrix(canvas.getHeight(), canvas.getWidth());
   
@@ -289,8 +300,39 @@ import timber.log.Timber;
         //      }
       }
     }
-  
-    // Método para obtener el contorno de los objetos rastreados
+
+  public synchronized void draww(final Canvas canvas) {
+    updateFrameToCanvasMatrix(canvas.getHeight(), canvas.getWidth());
+
+    long now = System.currentTimeMillis();
+    if (now - lastMoveTime >= 1000) {
+      movingCircleX += circleStep;
+      if (movingCircleX > canvas.getWidth()) {
+        movingCircleX = 0;
+      }
+      currentCirclePoint.x = Math.round(movingCircleX);
+      currentCirclePoint.y = (int) circleY;
+      lastMoveTime = now;
+    }
+
+    // Dibuja el círculo
+    canvas.drawCircle(movingCircleX, circleY, 20.0f, centroidPaint);
+
+    // Dibuja las coordenadas como texto al lado del círculo
+    borderedText.drawText(
+            canvas,
+            movingCircleX + 10,
+            circleY - 10,
+            String.format(Locale.US, "(%d, %d)", currentCirclePoint.x, currentCirclePoint.y),
+            centroidPaint
+    );
+  }
+
+
+
+
+
+  // Método para obtener el contorno de los objetos rastreados
     public List<PointF> getContour() {
       List<PointF> contourPoints = new ArrayList<>();
       for (TrackedRecognition recognition : trackedObjects) {
@@ -310,6 +352,8 @@ import timber.log.Timber;
 
     // Procesa y almacena los resultados de detección en trackedObjects
     private void processResults(final List<Recognition> results) {
+      Log.i("TRACKER", "Recibidos " + results.size() + " resultados del modelo");
+
       final List<Pair<Float, Recognition>> rectsToTrack = new LinkedList<Pair<Float, Recognition>>();
   
       screenRects.clear();
@@ -317,6 +361,7 @@ import timber.log.Timber;
   
       for (final Recognition result : results) {
         if (result.getLocation() == null) {
+          Log.w("TRACKER", "Detección sin ubicación válida");
           continue;
         }
         final RectF detectionFrameRect = new RectF(result.getLocation());
@@ -384,7 +429,7 @@ import timber.log.Timber;
     }*/
 
   //Encontrar el centroide de la imagen detectada NUEVO
-  public PointF getCenterOfTrackedObject() {
+ /* public PointF getCenterOfTrackedObject() {
     if (!trackedObjects.isEmpty()) {
       RectF trackedPos = new RectF(trackedObjects.get(0).location);
       getFrameToCanvasMatrix().mapRect(trackedPos);  // aplicar transformación
@@ -393,7 +438,28 @@ import timber.log.Timber;
       return new PointF(centerX, centerY);
     }
     return null;
+  }*/
+
+  //Encontrar el centroide de la imagen detectada NUEVO
+  public Point getCenterOfTrackedObject() {
+    if (!trackedObjects.isEmpty()) {
+      RectF trackedPos = new RectF(trackedObjects.get(0).location);
+      getFrameToCanvasMatrix().mapRect(trackedPos);  // aplicar transformación
+      int centerX = Math.round(trackedPos.centerX());
+      int centerY = Math.round(trackedPos.centerY());
+      return new Point(centerX, centerY);
+    }
+    return null;
   }
+
+
+  //Llama para pintar el circulo
+    /*
+  public Point getCenterOfTrackedObject() {
+    return new Point(currentCirclePoint); // Devuelve copia de la posición actual del círculo
+  }
+*/
+
 
 
   private static class TrackedRecognition {

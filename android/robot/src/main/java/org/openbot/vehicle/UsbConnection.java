@@ -19,6 +19,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Map;
 import org.openbot.env.Logger;
 import org.openbot.utils.Constants;
@@ -231,6 +232,7 @@ public class UsbConnection {
   }
 
   //Envía un mensaje a través de la conexión serial USB aegurando que el dispositivo este activo y disponible
+  /*
   public void send(String msg) {
     //Pregunta si el dispositivo se encuentra activo
     if (isOpen() && !isBusy()) {
@@ -241,11 +243,52 @@ public class UsbConnection {
       //System.out.println(serialDevice.toString());
       //Timber.d(serialDevice.toString());
       busy = false;
+      Timber.i("MENSAJE ENVIADO POR CONEXION SERIAL ES: " + msg);
     } else {
       //System.out.println("MENSAJE ENVIADO AL ROBOT: " + msg);
       Timber.d("USB ocupada, no se pudo enviar: %s", msg);
     }
+  }*/
+
+//Manda valores enteros
+
+  public void send(int msg) {
+    if (isOpen() && !isBusy()) {
+      busy = true;
+
+      // Convertir entero a String con salto de línea, luego a bytes
+      String mensaje = msg + "\n";  // <-- Arduino leerá hasta '\n'
+      serialDevice.write(mensaje.getBytes(UTF_8));  // ✅
+
+      busy = false;
+      Timber.i("MENSAJE ENVIADO POR CONEXION SERIAL ES: " + msg);
+    } else {
+      Timber.d("USB ocupada, no se pudo enviar: %s", msg);
+    }
   }
+
+  /*
+  public void send(byte[] message) {
+    if (isOpen() && !isBusy()) {
+      busy = true;
+
+      // Enviar directamente el arreglo de bytes al dispositivo serial
+      serialDevice.write(message);  // <-- Asegúrate que `serialDevice.write(...)` acepte byte[]
+
+      busy = false;
+      Timber.i("MENSAJE ENVIADO POR CONEXION SERIAL ES: " + Arrays.toString(message));
+    } else {
+      Timber.d("USB ocupada, no se pudo enviar el arreglo de bytes");
+    }
+  }
+
+*/
+
+
+
+
+
+
 
   public boolean isOpen() {
     return connection != null;

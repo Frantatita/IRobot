@@ -166,7 +166,7 @@ public class ObjectNavFragment extends CameraFragment {
     binding.cameraToggle.setOnClickListener(v -> toggleCamera());
 
     // Configura el botón para controlar el espejo
-         binding.mirrorControl.setOnClickListener(v -> mirrorControl());
+        // binding.mirrorControl.setOnClickListener(v -> mirrorControl());
 
     // Inicializa el spinner de modelos con los nombres de los modelos
     List<String> models =
@@ -275,8 +275,9 @@ public class ObjectNavFragment extends CameraFragment {
         });
   }
 
+  //LINEA COMENTADA 278
   private void mirrorControl() {
-    //requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     mirrorControl = !mirrorControl;
   }
 
@@ -318,6 +319,7 @@ public class ObjectNavFragment extends CameraFragment {
     binding.trackingOverlay.addCallback(
         canvas -> {
           tracker.draw(canvas);   //Aqui es donde lo dibuja
+          //tracker.draww(canvas);
           //          tracker.drawDebug(canvas);
             //AQUI DEBE MANDAR EL ARRAY DE LAS COORDENADA
           vehicle.receiveCenterOfTrackedObject(tracker.getCenterOfTrackedObject());
