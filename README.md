@@ -19,7 +19,7 @@
 
 ## Requisitos
 
-1. **Android Studio** (última versión recomendada).
+1. **Android Studio** 
 2. **Arduino IDE** para programar la placa.
 3. **Dispositivo Android** con Android 8.0 o superior.
 4. **Cable USB o conexión Bluetooth** para la comunicación con la placa Arduino.
