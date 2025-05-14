@@ -251,7 +251,7 @@ public class UsbConnection {
   }*/
 
 //Manda valores enteros
-
+/*
   public void send(int msg) {
     if (isOpen() && !isBusy()) {
       busy = true;
@@ -266,8 +266,8 @@ public class UsbConnection {
       Timber.d("USB ocupada, no se pudo enviar: %s", msg);
     }
   }
+*/
 
-  /*
   public void send(byte[] message) {
     if (isOpen() && !isBusy()) {
       busy = true;
@@ -281,12 +281,6 @@ public class UsbConnection {
       Timber.d("USB ocupada, no se pudo enviar el arreglo de bytes");
     }
   }
-
-*/
-
-
-
-
 
 
 

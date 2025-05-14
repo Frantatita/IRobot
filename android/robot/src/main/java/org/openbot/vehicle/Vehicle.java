@@ -501,7 +501,6 @@ public class Vehicle {
   }
 */
 
-
   public void sendConteoPrueba() {
     for (int i = 1; i <= 180; i++) { // Ciclo de 1 a 180
       String conteo = String.valueOf(i); // Convertir el número a String
