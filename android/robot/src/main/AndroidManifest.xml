@@ -29,10 +29,11 @@
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="true"/>
 
+    <!--Iconos, nombres, colores de la aplicacion-->
     <application
         android:name=".OpenBotApplication"
         android:allowBackup="false"
-        android:icon="@drawable/ic_robot_movimiento"
+        android:icon="@drawable/omnibot"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/ic_robot_movimiento"

@@ -27,7 +27,7 @@ public class FeatureList {
   public static final String CONTROLLER = "Controller";
   public static final String CONTROLLER_MAPPING = "Controller Mapping";
   //public static final String ROBOT_INFO = "Robot Info";
-  public static final String ROBOT_INFO = "Robot";
+  public static final String ROBOT_INFO = "IRobot";
 
 
   // Game
@@ -91,14 +91,14 @@ public class FeatureList {
     //subCategories.add(new SubCategory(CONTROLLER_MAPPING, R.drawable.ic_controller, "#7268A6"));
 
     subCategories = new ArrayList<>();
-    subCategories.add(new SubCategory(ROBOT_INFO, R.drawable.ic_robot_movimiento, "#00ff0080"));
+    subCategories.add(new SubCategory(ROBOT_INFO, R.drawable.ic_omnibot, "#00ff0080"));
     //categories.add(new Category(GENERAL, subCategories));
     categories.add(new Category(ENCABEZADO, subCategories));
 
 
     subCategories = new ArrayList<>();
     //subCategories.add(new SubCategory(AUTOPILOT, R.drawable.ic_autopilot, "#44525F"));
-    subCategories.add(new SubCategory(OBJECT_NAV, R.drawable.ic_person_search_movimiento, "#00ff0080"));
+    subCategories.add(new SubCategory(OBJECT_NAV, R.drawable.ic_nao, "#00ff0080"));
     //subCategories.add(
     //    new SubCategory(POINT_GOAL_NAVIGATION, R.drawable.ic_baseline_golf_course, "#1BBFBF"));
     categories.add(new Category(ESPACIOS,subCategories));

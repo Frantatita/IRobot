@@ -435,7 +435,7 @@ public class Vehicle {
     }
   }*/
 
-
+/*
   //Manda valores en entero
   private void sendStringToDevice(int message) {
     //System.out.println("MENSAJE ENVIADO AL ROBOT: " + message);
@@ -448,8 +448,9 @@ public class Vehicle {
             && bluetoothManager.isBleConnected()) {
     }
   }
+  */
 
-/*
+
   private void sendBytesToDevice(byte[] message) {
     if (getConnectionType().equals("USB") && usbConnection != null) {
       usbConnection.send(message); // Método que acepte byte[]
@@ -458,7 +459,7 @@ public class Vehicle {
             && bluetoothManager.isBleConnected()) {
     }
   }
-*/
+
 
 
   public float getLeftSpeed() {
@@ -484,13 +485,14 @@ public class Vehicle {
  */
 
 
+  /*
   public void sendCordinateRobot(int coordX){
     int cordenadas = coordX;
     //int [] coordenadas = {coordX, coordY};
     sendStringToDevice(cordenadas);
-  }
+  } */
 
-/*
+
   //Metodo para mandar por un arreglo
   public void sendCoordinatesToRobot(int coordX, int coordY) {
     ByteBuffer buffer = ByteBuffer.allocate(8); // 4 bytes por coordenada
@@ -499,7 +501,7 @@ public class Vehicle {
     byte[] byteArray = buffer.array();
     sendBytesToDevice(byteArray);
   }
-*/
+
 
   public void sendConteoPrueba() {
     for (int i = 1; i <= 180; i++) { // Ciclo de 1 a 180
@@ -527,9 +529,9 @@ public class Vehicle {
   public void receiveCenterOfTrackedObject(Point centerPoint) {
     if (centerPoint != null) {
       int coordX = centerPoint.x;
-      //int coordY = centerPoint.y;
-      sendCordinateRobot(coordX);
-      //sendCoordinatesToRobot(coordX, coordY);
+      int coordY = centerPoint.y;
+      //sendCordinateRobot(coordX);
+      sendCoordinatesToRobot(coordX, coordY);
     }
   }
 
